@@ -12,6 +12,7 @@ SEONHYEONG KIM 2018227098
 ./configure --prefix=/usr/share/man --with-ssl  
 make && make install  
 
+
 ####If there are problem with permission please do with root  
 
 
@@ -19,12 +20,14 @@ make && make install
 sudo apt-get install curl  
 
 ####you can check with  
+
+
 curl -V  
 curl naver.com  
 #### at command line if command prints something. installed well.  
 
 
-- TidyLib : 
+###  - TidyLib : 
 
 
 ###References
