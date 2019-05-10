@@ -8,7 +8,7 @@ SEONHYEONG KIM 2018227098
 ***KNU ADVANCED SYSTEM PROJECT TERM PROJECT***
 
 ## Dependencies
-###  - libcurl : 
+###  * libcurl : 
 > ./configure --prefix=/usr/share/man --with-ssl  
 > make && make install  
 #### If there are problem with permission please do with root Or  
@@ -20,8 +20,8 @@ SEONHYEONG KIM 2018227098
 #### at command line if command prints something. installed well.  
 
 
-###  - TidyLib :  
+###  * TidyLib :  
 
 
-### References  
+## References  
 https://github.com/htacg/tidy-html5
