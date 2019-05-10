@@ -9,20 +9,21 @@ SEONHYEONG KIM 2018227098
 
 ## Dependencies
 ###  * libcurl : 
-./configure --prefix=/usr/share/man --with-ssl
-make && make install
-If there are problem with permission please do with root
+./configure --prefix=/usr/share/man --with-ssl  
+make && make install  
+If there are problem with permission please do with root  
 
 ####Or
-sudo apt-get install curl
+sudo apt-get install curl  
 
 ####you can check with 
-curl -V 
-curl naver.com
+curl -V  
+curl naver.com  
 #### at command line if command prints something. installed well. 
-  
+
 
 * TidyLib : 
+
 
 ###References
 
