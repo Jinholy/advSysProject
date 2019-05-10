@@ -11,11 +11,11 @@ SEONHYEONG KIM 2018227098
 ###  - libcurl : 
 ./configure --prefix=/usr/share/man --with-ssl  
 make && make install  
-####If there are problem with permission please do with root  
+#### If there are problem with permission please do with root  
 
-####Or
+#### Or
 sudo apt-get install curl  
-####you can check with  
+#### you can check with  
 curl -V  
 curl naver.com  
 #### at command line if command prints something. installed well.  
@@ -24,5 +24,5 @@ curl naver.com
 ###  - TidyLib :  
 
 
-###References  
+### References  
 https://github.com/htacg/tidy-html5
