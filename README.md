@@ -10,6 +10,7 @@ SEONHYEONG KIM 2018227098
     
 ## Dependencies
 ###  * libcurl : 
+### move to the curl-7.64.1 directory and  
 > ./configure --prefix=/usr/share/man --with-ssl  
 > make && make install  
 #### If there are problem with permission please do with root Or  
@@ -22,7 +23,15 @@ SEONHYEONG KIM 2018227098
 
 
 ###  * TidyLib :  
-
-    
+#### clone tidy 
+> git clone https://github.com/htacg/tidy-html5.git  
+#### build tidy library  
+> cd build/cmake  
+> cmake ../.. -DCMAKE_BUILD_TYPE=Release  
+> make  
+> sudo make install  
+#### if you have problem with build tidy, read this page
+> https://github.com/htacg/tidy-html5/blob/next/README/BUILD.md
 ## References  
-https://github.com/htacg/tidy-html5
+* https://github.com/htacg/tidy-html5
+* 
