@@ -10,7 +10,7 @@ SEONHYEONG KIM 2018227098
     
 ## Dependencies
 ###  * libcurl : 
-### move to the curl-7.64.1 directory and  
+#### move to the curl-7.64.1 directory and  
 > ./configure --prefix=/usr/share/man --with-ssl  
 > make && make install  
 #### If there are problem with permission please do with root Or  
