@@ -22,16 +22,23 @@ SEONHYEONG KIM 2018227098
 #### at command line if command prints something. installed well.  
 
 
-###  * TidyLib :  
-#### clone tidy 
-> git clone https://github.com/htacg/tidy-html5.git  
-#### build tidy library  
-> cd build/cmake  
-> cmake ../.. -DCMAKE_BUILD_TYPE=Release  
-> make  
-> sudo make install  
-#### if you have problem with build tidy, read this page
-> https://github.com/htacg/tidy-html5/blob/next/README/BUILD.md
-## References  
-* https://github.com/htacg/tidy-html5
-* 
+###  * gumbo-parser :  
+#### clone gumbo-parser
+> git clone https://github.com/google/gumbo-parser.git  
+#### install tools  
+> sudo apt-get install libtool  
+> sudo apt-get install automake  
+#### type on command line at gumbo-parser directory
+> cd gumbo-parser
+> ./autogen.sh
+> ./configure
+> make
+> sudo make install
+> sudo apt-get install libgomp1
+
+### How to compile
+> g++ -o main main.c -lcurl -lgumbo
+
+### How to run
+> ./main .ext url
+> ex) ./main .zip https://iscxdownloads.cs.unb.ca/iscxdownloads/CICAndMal2017/CSVs/
