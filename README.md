@@ -29,16 +29,16 @@ SEONHYEONG KIM 2018227098
 > sudo apt-get install libtool  
 > sudo apt-get install automake  
 #### type on command line at gumbo-parser directory
-> cd gumbo-parser
-> ./autogen.sh
-> ./configure
-> make
-> sudo make install
-> sudo apt-get install libgomp1
+> cd gumbo-parser  
+> ./autogen.sh  
+> ./configure  
+> make  
+> sudo make install  
+> sudo apt-get install libgomp1  
 
-### How to compile
-> g++ -o main main.c -lcurl -lgumbo
+### How to compile  
+> g++ -o main main.c -lcurl -lgumbo  
 
-### How to run
-> ./main .ext url
+### How to run  
+> ./main .ext url 
 > ex) ./main .zip https://iscxdownloads.cs.unb.ca/iscxdownloads/CICAndMal2017/CSVs/
