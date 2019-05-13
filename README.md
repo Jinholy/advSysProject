@@ -40,5 +40,5 @@ SEONHYEONG KIM 2018227098
 > g++ -o main main.c -lcurl -lgumbo  
 
 ### How to run  
-> ./main .ext url 
+> ./main .ext url  
 > ex) ./main .zip https://iscxdownloads.cs.unb.ca/iscxdownloads/CICAndMal2017/CSVs/
