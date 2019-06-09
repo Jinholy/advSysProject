@@ -38,6 +38,8 @@ SEONHYEONG KIM 2018227098
 
 ### How to compile  
 > g++ -o main main.c -lcurl -lgumbo  
+### if you cannot compile it because of lcurl  
+> sudo apt-get install libcurl4-openssl-dev  
 
 ### How to run  
 > ./main .ext url  

@@ -1,19 +1,19 @@
 /*
-프로그램　실행되는　순서
+프로그램 실행되는 순서
 main.c
-parseurl.c          의　parse()                 (input: url, thread_count) -> (output: output1.txt)
-gumbo.cpp           의　getHref()               (input: filename)          -> (output: hrefList.txt)
-makelistwithext.cpp 의　makeListwithExt()       (input : hrefList.txt)     -> (output: extList.txt)
-download.cpp        의　download()              (input : extList.txt)      -> (output: wget 명령어를　통해　다운로드된　파일)
-순으로　진행됨．
+parseurl.c          의 parse()                 (input: url, thread_count) -> (output: output1.txt)
+gumbo.cpp           의 getHref()               (input: filename)          -> (output: hrefList.txt)
+makelistwithext.cpp 의 makeListwithExt()       (input : hrefList.txt)     -> (output: extList.txt)
+download.cpp        의 download()              (input : extList.txt)      -> (output: wget 명령어를 통해 다운로드된 파일)
+순으로 진행됨．
 
-지금상태　요약(마지막에　개선사항)：
+지금상태 요약(마지막에 개선사항)：
 1.thread미구현
-2.href태그만　뽑아낸다．(image　등은　안됨)
-3.root에　대한것만　처리(재귀적으로　실행되지않음)　
-지금　해놓은게　gumboparser가　네트워크에서　바로바로　재귀적으로　하는게　아니고　파일로　읽어들여서　수행하는거라　
-parseurl.c가　에서　파싱한　페이지가　재귀적으로　읽어들여서　하지　않아　그런게　가장　유력함．
-4.thread미구현의　연장선인데　wget　명령어가　하나씩　수행되서　효율떨어짐．　당장에는　wget명령어를　background에서　수행하게　옵션　집어넣으면　될듯하다．
+2.href태그만 뽑아낸다．(image 등은 안됨)
+3.root에 대한것만 처리(재귀적으로 실행되지않음) 
+지금 해놓은게 gumboparser가 네트워크에서 바로바로 재귀적으로 하는게 아니고 파일로 읽어들여서 수행하는거라 
+parseurl.c가 에서 파싱한 페이지가 재귀적으로 읽어들여서 하지 않아 그런게 가장 유력함．
+4.thread미구현의 연장선인데 wget 명령어가 하나씩 수행되서 효율떨어짐． 당장에는 wget명령어를 background에서 수행하게 옵션 집어넣으면 될듯하다．
 */
 
 #include <stdlib.h>
