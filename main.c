@@ -1,7 +1,7 @@
 /*
 프로그램 실행되는 순서
 main.c
-parseurl.c          의 parse()                 (input: url, thread_count) -> (output: output1.txt)
+parseurl.c          의 parse()                 (input: url) -> (output: output1.txt)
 gumbo.cpp           의 getHref()               (input: filename)          -> (output: hrefList.txt)
 makelistwithext.cpp 의 makeListwithExt()       (input : hrefList.txt)     -> (output: extList.txt)
 download.cpp        의 download()              (input : extList.txt)      -> (output: wget 명령어를 통해 다운로드된 파일)
@@ -23,8 +23,11 @@ parseurl.c가 에서 파싱한 페이지가 재귀적으로 읽어들여서 하�
 #include "gumbo.cpp"
 #include "makelistwithext.cpp"
 #include "download.cpp"
+#include <pthread.h>
 
 #define BUFF_SIZE 1024
+
+static void* threadFunc(void *arg);
 
 int main(int argc, char* argv[]){
     if(argc != 3){
@@ -34,12 +37,36 @@ int main(int argc, char* argv[]){
     }
     
     char cmd[BUFF_SIZE] = "wget ";
-    char *url = argv[2];
+    int depth = 1;
+    char *ext = argv[1];
+    const char *url = argv[2];
+    int s;
+    pthread_t t1;
+    void *res;
+    char *filename = "output1.txt";
 
-    char* filename = parse(url,1);      //parse(url, thread_count) thread has not been implemented yet  // output: output1.txt
+
+    //set and run thread
+    s = pthread_create(&t1, NULL, threadFunc, (void*)url);
+    s = pthread_join(t1, &res);
+    printf("**finding files...\n -ext  : %s \n -url  : %s\n", ext, url);
+
+
+    //start parsing and download files
+    parse_url_tree(url, depth);         //parse(url) // output: output1.txt
     getHref(filename);                  //get href list      input : filename, output : hrefList.txt
-    makeListwithExt(argv[1]);           //make list with extention that want to download
-    download(url);                      //start download with wget
+    makeListwithExt(ext);               //make list with extention that want to download
+    download(url, ext);                 //start download with wget
 
+    printf("thread returned %ld\n", (long) res);
     exit(EXIT_SUCCESS);
 }
+
+
+static void* threadFunc(void *arg){     //we are gonna put inotify here
+    char *s = (char*) arg;
+    //printf("%s", s);
+
+    return (void *) strlen(s);
+}
+

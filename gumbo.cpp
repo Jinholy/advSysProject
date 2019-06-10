@@ -33,7 +33,7 @@ static void search_for_links(GumboNode *node)
   }
 }
 
-extern "C" void getHref(char* file_name)
+extern "C" void getHref(const char* file_name)
 {
   //지금 gumboparser는 로컬에 있는 파일을 읽어들여서 거기서 href태그만 뽑아다가 출력하는 방식．
   //const char *filename = "file_name";

@@ -2,6 +2,7 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/queue.h>
 
 //WriteMemoryCallback 함수에서 쓰일 구조체
 struct MemoryStruct
@@ -31,7 +32,7 @@ static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, voi
     return realsize;
 }
 
-char* parse(char *url, int file_count)  //returns file_name
+void parse(const char *url)  //returns file_name
 {
     //파싱하는 함수
     CURL *curl;
@@ -41,12 +42,13 @@ char* parse(char *url, int file_count)  //returns file_name
     chunk.size = 0;                     //구조체 초기화
     curl = curl_easy_init();            //curl 초기화
     
+    /*
     //이거는 나중에 thread 돌리면 output이 많이생길거니까 
     //출력파일명 output1 ~ outputn 으로 출력하기위해 선언해 둠．
     char buf[100];                          
-    sprintf(buf,"output%d.txt",file_count);
+    sprintf(buf,"output%d.txt",1);
     char *file_name = buf;                  
-
+    */
     if (curl)
     {
         //curl_easy_setopt함수에 curl_easy_perform을 수행하기전에 설정하는 부분
@@ -69,7 +71,7 @@ char* parse(char *url, int file_count)  //returns file_name
         {
             //printf("%lu bytes retrieved\n", (unsigned long)chunk.size);
             FILE *pFile;
-            pFile = fopen(file_name,"wb");
+            pFile = fopen("output1.txt","wb");
             fwrite(chunk.memory, 1, (unsigned long)chunk.size, pFile);      
             //위에 CURLOPT_WRITEFUNCTION, CURLOPT_WRITEDATA 옵션을 통해 chunk.memory에 쓰여진 데이터를 파일로 씀
             fclose(pFile);
@@ -78,5 +80,9 @@ char* parse(char *url, int file_count)  //returns file_name
         curl_easy_cleanup(curl);    //이건 그냥 해줘야되는 듯 하다．
         free(chunk.memory);         //동적할당했기 때문에 free해줌
     }
-    return file_name;
+    //return file_name;
+}
+
+int parse_url_tree(const char* url, int depth){
+    parse(url);
 }
