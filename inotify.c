@@ -1,9 +1,20 @@
 #include<stdio.h>
 #include<sys/inotify.h>
+#include<stdlib.h>
+#include<unistd.h>
+
+#define BUF_LEN 4048
+#define INOTIFY_PATH "."
+/* Display information from inotify_event structure */
+
+int inotifyFd, wd, j;
+char buf[BUF_LEN] __attribute__((aligned(8)));
+ssize_t numRead;
+char *p;
+struct inotify_event *event;
 
 
-static void             /* Display information from inotify_event structure */
-displayInotifyEvent(struct inotify_event *i)
+static void displayInotifyEvent(struct inotify_event *i)
 {
     printf("    wd =%2d; ", i->wd);
     if (i->cookie > 0)
@@ -32,4 +43,21 @@ displayInotifyEvent(struct inotify_event *i)
         printf("        name = %s\n", i->name);
 }
 
-#define BUF_LEN (10 * (sizeof(struct inotify_event) + NAME_MAX + 1))
+int my_init_inotifier(){
+    inotifyFd = inotify_init();
+
+    if(inotifyFd == -1){
+        printf("init error");
+        exit(EXIT_FAILURE);
+    }
+
+    //wd = inotify_add_watch(inotifyFd, ".", IN_ALL_EVENTS);
+    wd = inotify_add_watch(inotifyFd, ".", IN_CLOSE_WRITE);
+    
+    if(wd == -1){
+        printf("inotify add watch error");
+        exit(EXIT_FAILURE);
+    }
+    
+    printf("Watching %s using wd %d \n", ".", wd);
+}
