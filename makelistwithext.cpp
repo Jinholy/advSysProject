@@ -3,7 +3,8 @@
 #include <string>
 
 using namespace std;
-//C++ 함수를 c에서 사용하려면 함수 앞에 extern "C"를 붙여주면된다． 
+
+//C++ 함수를 c에서 사용하려면 함수 앞에 extern "C"를 붙여주면된다．
 extern "C" void makeListwithExt(char* ext){
     ifstream in("hrefList.txt", ios::in | ios::binary);             //href 태그가 붙은거를 모아둔 txt파일을 읽음
     ofstream out("extList.txt", ios::out | ofstream::binary);       //원하는 확장자만 모아둔 txt에 쓸것．
