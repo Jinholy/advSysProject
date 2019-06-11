@@ -37,7 +37,7 @@ SEONHYEONG KIM 2018227098
 > sudo apt-get install libgomp1  
 
 ### How to compile  
-> g++ -o main main.c -lcurl -lgumbo  
+> g++ -o main main.c -lcurl -lgumbo -pthread  
 ### if you cannot compile it because of lcurl  
 > sudo apt-get install libcurl4-openssl-dev  
 
