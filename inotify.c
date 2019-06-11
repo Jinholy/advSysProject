@@ -9,7 +9,7 @@
 
 void refresh_file_list();
 bool check_list(const char* str);
-void extract_file();
+void extract_file(const char* file_name);
 
 int inotifyFd, wd, j;
 char buf[BUF_LEN] __attribute__((aligned(8)));
@@ -18,7 +18,7 @@ char *p;
 struct inotify_event *event;
 const char* file_list[LIST_SIZE];
 int file_cnt = 0;
-int extract_file_cnt = 0;
+int  checked_file_cnt = 0;
 
 static void displayInotifyEvent(struct inotify_event *i)
 {
@@ -34,10 +34,18 @@ static void displayInotifyEvent(struct inotify_event *i)
         refresh_file_list();
         if(check_list(i->name)){
             printf("download finished! %s\n",i->name);
-            //put extract function here;
-            extract_file();
-            exit(EXIT_SUCCESS);
+            checked_file_cnt++;
+            printf("Do you want to extract files %s?(y/n)\n", i->name);
+            char wanna_ext[10];
+            scanf("%s", wanna_ext);
 
+            if (!strcmp(wanna_ext, "n") || !strcmp(wanna_ext, "N"))     //압축푸는걸 원치않으면 스레드 종료
+                exit(EXIT_SUCCESS);
+            else
+                extract_file(i->name);
+            
+            if(checked_file_cnt == file_cnt)        //체크한 파일과 총 파일 갯수가 동일하면 스레드 종료
+                exit(EXIT_SUCCESS);
         }
     }
     if (i->mask & IN_CREATE)        printf("IN_CREATE ");
@@ -59,6 +67,7 @@ static void displayInotifyEvent(struct inotify_event *i)
 }
 
 int my_init_inotifier(){
+
     inotifyFd = inotify_init();
 
     if(inotifyFd == -1){
@@ -78,10 +87,12 @@ int my_init_inotifier(){
 }
 
 static void* threadFunc(void *arg){     //we are gonna put inotify here
-    //har *s = (char*) arg;
+    bool *wanna_download = (bool*) arg;
     //printf("%s", s);
     //return (void *) strlen(s);
-
+    if(!wanna_download){
+        exit(EXIT_FAILURE);
+    }
     my_init_inotifier();
     while(1)
     { /* Read events forever */
@@ -130,6 +141,8 @@ bool check_list(const char* str){
     return false;
 }
 
-void extract_file(){
-
+void extract_file(const char* file_name){
+    char command[BUF_LEN];
+    sprintf(command, "unzip %s -d ./extfiles/%s", file_name, file_name);
+    system(command);
 }

@@ -45,10 +45,9 @@ int main(int argc, char* argv[]){
     pthread_t t1;
     void *res;
     const char *filename = "output1.txt";
-
+    bool wanna_download = false;
 
     //set and run thread
-    s = pthread_create(&t1, NULL, threadFunc, (void*)url);        //threadFunc is in inotify.c
     printf("**finding files...\n -ext  : %s \n -url  : %s\n", ext, url);
 
 
@@ -56,9 +55,8 @@ int main(int argc, char* argv[]){
     parse_url_tree(url, depth);         //parse(url) // output: output1.txt
     getHref(filename);                  //get href list      input : filename, output : hrefList.txt
     makeListwithExt(ext);               //make list with extention that want to download
-    download(url, ext);                 //start download with wget
-
+    wanna_download = download(url, ext);                 //start download with wget
+    s = pthread_create(&t1, NULL, threadFunc, (void*)wanna_download);        //threadFunc is in inotify.c
     s = pthread_join(t1, &res);
-    printf("thread returned %ld\n", (long) res);
     exit(EXIT_SUCCESS);
 }
