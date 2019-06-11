@@ -143,6 +143,10 @@ bool check_list(const char* str){
 
 void extract_file(const char* file_name){
     char command[BUF_LEN];
-    sprintf(command, "unzip %s -d ./extfiles/%s", file_name, file_name);
+    char *ext_dir;
+    char *ptr = strtok((char*)file_name, ".");
+    ext_dir = ptr;
+    
+    sprintf(command, "unzip %s -d ./%s", file_name, ext_dir);
     system(command);
 }
