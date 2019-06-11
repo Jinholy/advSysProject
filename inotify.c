@@ -144,8 +144,17 @@ bool check_list(const char* str){
 void extract_file(const char* file_name){
     char command[BUF_LEN];
     char *ext_dir;
+    char *ext_type;
     char *ptr = strtok((char*)file_name, ".");
+    
     ext_dir = ptr;
+    ext_type = strtok(NULL, ".");
+    
+    printf("file type: %s\n", ext_type);
+    if(strcmp(ext_type,"zip")){
+        printf("sorry we can extract only .zip file\n");
+        exit(EXIT_FAILURE);
+    }
     
     sprintf(command, "unzip %s -d ./%s", file_name, ext_dir);
     system(command);
