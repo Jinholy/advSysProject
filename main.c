@@ -29,7 +29,6 @@ zip 파일 하나있는 링크 https://iscxdownloads.cs.unb.ca/iscxdownloads/NSL
 
 #define BUFF_SIZE 1024
 
-static void* threadFunc(void *arg);
 
 int main(int argc, char* argv[]){
     if(argc != 3){
@@ -49,8 +48,7 @@ int main(int argc, char* argv[]){
 
 
     //set and run thread
-    //s = pthread_create(&t1, NULL, threadFunc, (void*)url);
-    //s = pthread_join(t1, &res);
+    s = pthread_create(&t1, NULL, threadFunc, (void*)url);        //threadFunc is in inotify.c
     printf("**finding files...\n -ext  : %s \n -url  : %s\n", ext, url);
 
 
@@ -60,39 +58,7 @@ int main(int argc, char* argv[]){
     makeListwithExt(ext);               //make list with extention that want to download
     download(url, ext);                 //start download with wget
 
+    s = pthread_join(t1, &res);
     printf("thread returned %ld\n", (long) res);
     exit(EXIT_SUCCESS);
-}
-
-
-static void* threadFunc(void *arg){     //we are gonna put inotify here
-    //har *s = (char*) arg;
-    //printf("%s", s);
-    //return (void *) strlen(s);
-
-    my_init_inotifier();
-    while(1)
-    { /* Read events forever */
-        numRead = read(inotifyFd, buf, BUF_LEN);
-        if (numRead == 0){
-            printf("read() from inotify fd returned 0!");
-            exit(EXIT_FAILURE);
-        }
-            
-        if (numRead == -1){
-            printf("readError");
-            exit(EXIT_FAILURE);
-        }
-        printf("Read %ld bytes from inotify fd\n", (long)numRead);
-
-        /* Process all of the events in buffer returned by read() */
-
-        for (p = buf; p < buf + numRead;)
-        {
-            event = (struct inotify_event *)p;
-            displayInotifyEvent(event);
-
-            p += sizeof(struct inotify_event) + event->len;
-        }
-    }
 }

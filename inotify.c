@@ -9,6 +9,7 @@
 
 void refresh_file_list();
 bool check_list(const char* str);
+void extract_file();
 
 int inotifyFd, wd, j;
 char buf[BUF_LEN] __attribute__((aligned(8)));
@@ -32,8 +33,11 @@ static void displayInotifyEvent(struct inotify_event *i)
     if (i->mask & IN_CLOSE_WRITE){
         refresh_file_list();
         if(check_list(i->name)){
-            printf("download finished!");
+            printf("download finished! %s\n",i->name);
             //put extract function here;
+            extract_file();
+            exit(EXIT_SUCCESS);
+
         }
     }
     if (i->mask & IN_CREATE)        printf("IN_CREATE ");
@@ -48,10 +52,10 @@ static void displayInotifyEvent(struct inotify_event *i)
     if (i->mask & IN_OPEN)          printf("IN_OPEN ");
     if (i->mask & IN_Q_OVERFLOW)    printf("IN_Q_OVERFLOW ");
     if (i->mask & IN_UNMOUNT)       printf("IN_UNMOUNT ");
-    printf("\n");
+    //printf("\n");
 
-    if (i->len > 0)
-        printf("        name = %s\n", i->name);
+    //if (i->len > 0)
+    //    printf("        name = %s\n", i->name);
 }
 
 int my_init_inotifier(){
@@ -110,6 +114,7 @@ void refresh_file_list(){
     FILE *fp = fopen("extList.txt", "r");
     file_cnt = 0;
     while(fgets(buffer, sizeof(buffer), fp)){
+        buffer[strlen(buffer) -1] = '\0';       //remove \n
         file_list[file_cnt++] = buffer;
     }
     fclose(fp);
@@ -117,9 +122,10 @@ void refresh_file_list(){
 
 bool check_list(const char* str){
     for(int i =0; i< file_cnt; i++){
-        printf("%s %s", file_list[i], str);
-        if(strcmp(file_list[i],str))
+        //printf("%s %s\n", file_list[i], str);
+        if(!strcmp(file_list[i],str)){ //if same return 0
             return true;
+        }
     }
     return false;
 }
