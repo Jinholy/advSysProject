@@ -5,26 +5,37 @@
 
 #define BUF_LEN 4048
 #define INOTIFY_PATH "."
-/* Display information from inotify_event structure */
+#define LIST_SIZE 100
+
+void refresh_file_list();
+bool check_list(const char* str);
 
 int inotifyFd, wd, j;
 char buf[BUF_LEN] __attribute__((aligned(8)));
 ssize_t numRead;
 char *p;
 struct inotify_event *event;
-
+const char* file_list[LIST_SIZE];
+int file_cnt = 0;
+int extract_file_cnt = 0;
 
 static void displayInotifyEvent(struct inotify_event *i)
 {
-    printf("    wd =%2d; ", i->wd);
+    //printf("    wd =%2d; ", i->wd);
     if (i->cookie > 0)
         printf("cookie =%4d; ", i->cookie);
 
-    printf("mask = ");
+    //printf("mask = ");
     if (i->mask & IN_ACCESS)        printf("IN_ACCESS ");
     if (i->mask & IN_ATTRIB)        printf("IN_ATTRIB ");
     if (i->mask & IN_CLOSE_NOWRITE) printf("IN_CLOSE_NOWRITE ");
-    if (i->mask & IN_CLOSE_WRITE)   printf("IN_CLOSE_WRITE ");
+    if (i->mask & IN_CLOSE_WRITE){
+        refresh_file_list();
+        if(check_list(i->name)){
+            printf("download finished!");
+            //put extract function here;
+        }
+    }
     if (i->mask & IN_CREATE)        printf("IN_CREATE ");
     if (i->mask & IN_DELETE)        printf("IN_DELETE ");
     if (i->mask & IN_DELETE_SELF)   printf("IN_DELETE_SELF ");
@@ -59,5 +70,60 @@ int my_init_inotifier(){
         exit(EXIT_FAILURE);
     }
     
-    printf("Watching %s using wd %d \n", ".", wd);
+    //printf("Watching %s using wd %d \n", ".", wd);
+}
+
+static void* threadFunc(void *arg){     //we are gonna put inotify here
+    //har *s = (char*) arg;
+    //printf("%s", s);
+    //return (void *) strlen(s);
+
+    my_init_inotifier();
+    while(1)
+    { /* Read events forever */
+        numRead = read(inotifyFd, buf, BUF_LEN);
+        if (numRead == 0){
+            printf("read() from inotify fd returned 0!");
+            exit(EXIT_FAILURE);
+        }
+            
+        if (numRead == -1){
+            printf("readError");
+            exit(EXIT_FAILURE);
+        }
+        //printf("Read %ld bytes from inotify fd\n", (long)numRead);
+
+        /* Process all of the events in buffer returned by read() */
+
+        for (p = buf; p < buf + numRead;)
+        {
+            event = (struct inotify_event *)p;
+            displayInotifyEvent(event);
+            
+            p += sizeof(struct inotify_event) + event->len;
+        }
+    }
+}
+
+void refresh_file_list(){
+    char buffer[BUF_LEN];
+    FILE *fp = fopen("extList.txt", "r");
+    file_cnt = 0;
+    while(fgets(buffer, sizeof(buffer), fp)){
+        file_list[file_cnt++] = buffer;
+    }
+    fclose(fp);
+}
+
+bool check_list(const char* str){
+    for(int i =0; i< file_cnt; i++){
+        printf("%s %s", file_list[i], str);
+        if(strcmp(file_list[i],str))
+            return true;
+    }
+    return false;
+}
+
+void extract_file(){
+
 }
